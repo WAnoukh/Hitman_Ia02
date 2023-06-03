@@ -1,4 +1,4 @@
-from hitman.hitman import HC, HitmanReferee, complete_map_example
+from hitman import HC, HitmanReferee, complete_map_example
 from pprint import pprint
 
 
