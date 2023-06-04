@@ -88,6 +88,9 @@ world_example = [
     [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
 ]
 
+
+
+
 complete_map_example = {
     (0, 5): HC.EMPTY,
     (1, 5): HC.EMPTY,
@@ -310,10 +313,10 @@ class HitmanReferee:
         for l in self.__world:
             for c in l:
                 if (
-                    c == HC.CIVIL_N
-                    or c == HC.CIVIL_E
-                    or c == HC.CIVIL_S
-                    or c == HC.CIVIL_W
+                        c == HC.CIVIL_N
+                        or c == HC.CIVIL_E
+                        or c == HC.CIVIL_S
+                        or c == HC.CIVIL_W
                 ):
                     count += 1
         return count
@@ -323,25 +326,25 @@ class HitmanReferee:
         for l in self.__world:
             for c in l:
                 if (
-                    c == HC.GUARD_N
-                    or c == HC.GUARD_E
-                    or c == HC.GUARD_S
-                    or c == HC.GUARD_W
+                        c == HC.GUARD_N
+                        or c == HC.GUARD_E
+                        or c == HC.GUARD_S
+                        or c == HC.GUARD_W
                 ):
                     count += 1
         return count
 
     def __compute_civils(
-        self,
+            self,
     ) -> Dict[Tuple[int, int], List[Tuple[Tuple[int, int], HC]]]:
         locations = {}
         for l_index, l in enumerate(self.__world):
             for c_index, c in enumerate(l):
                 if (
-                    c == HC.CIVIL_N
-                    or c == HC.CIVIL_E
-                    or c == HC.CIVIL_S
-                    or c == HC.CIVIL_W
+                        c == HC.CIVIL_N
+                        or c == HC.CIVIL_E
+                        or c == HC.CIVIL_S
+                        or c == HC.CIVIL_W
                 ):
                     civil_x, civil_y = (c_index, self.__m - l_index - 1)
                     locations[(civil_x, civil_y)] = self.__get_civil_vision(
@@ -382,22 +385,22 @@ class HitmanReferee:
             count += (
                 1
                 if len([0 for ((l, c), _) in self.__civils[civil] if l == x and c == y])
-                > 0
+                   > 0
                 else 0
             )
         return count
 
     def __compute_guards(
-        self,
+            self,
     ) -> Dict[Tuple[int, int], List[Tuple[Tuple[int, int], HC]]]:
         locations = {}
         for l_index, l in enumerate(self.__world):
             for c_index, c in enumerate(l):
                 if (
-                    c == HC.GUARD_N
-                    or c == HC.GUARD_E
-                    or c == HC.GUARD_S
-                    or c == HC.GUARD_W
+                        c == HC.GUARD_N
+                        or c == HC.GUARD_E
+                        or c == HC.GUARD_S
+                        or c == HC.GUARD_W
                 ):
                     guard_x, guard_y = (c_index, self.__m - l_index - 1)
                     locations[(guard_x, guard_y)] = self.__get_guard_vision(
@@ -448,7 +451,7 @@ class HitmanReferee:
                     if len(
                         [0 for ((l, c), _) in self.__guards[guard] if l == x and c == y]
                     )
-                    > 0
+                       > 0
                     else 0
                 )
         self.__is_in_guard_range = count > 0
