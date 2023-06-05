@@ -128,8 +128,25 @@ print(f"at_most_one_R2 = {at_most_one_R2}\n")
 # /!\ We have to take into account the direction of the guards and civils : we have 8 elements 
 
 #R3.a there are at least nb_guards guards and nb_civils civils on the map 
+at_least_nb_guards = []
+at_least_nb_civils = []
+for i in range (0, m) :
+    for j in range (0, n) :
+        at_least_nb_civils.append(f"{i}_{j}_{Elt.PIANO_WIRE.value}")
+        at_least_one_pw_neg.append(f"-{i}_{j}_{Elt.PIANO_WIRE.value}")
 
+        at_least_one_suit.append(f"{i}_{j}_{Elt.SUIT.value}")
+        at_least_one_suit_neg.append(f"-{i}_{j}_{Elt.SUIT.value}")
 
+        at_least_one_target.append(f"{i}_{j}_{Elt.TARGET.value}")
+        at_least_one_target_neg.append(f"-{i}_{j}_{Elt.TARGET.value}")
+
+print(f"at_least_one_pw = {at_least_one_pw}\n")
+print(f"at_least_one_pw_neg = {at_least_one_pw_neg}\n")
+print(f"at_least_one_suit = {at_least_one_suit}\n")
+print(f"at_least_one_suit_neg = {at_least_one_suit_neg}\n")
+print(f"at_least_one_target = {at_least_one_target}\n")
+print(f"at_least_one_target_neg = {at_least_one_target_neg}\n")
 
 
 
