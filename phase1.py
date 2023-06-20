@@ -29,7 +29,7 @@ def print_vision_RM():
     cpy = [c[:] for c in reversed(route_map)]
     printMat(cpy)
 
-
+#pas trop compris
 def update_KB():
     for (x, y), cell in status["vision"]:
         vision_KB[y][x] = cell
@@ -46,21 +46,21 @@ def move():
     update_KB()
     print_vision_RM()
 
-
+#ok
 def turn_anti_clockwise():
     print("turn anti !")
     global status
     status = hr.turn_anti_clockwise()
     update_KB()
 
-
+#ok
 def turn_clockwise():
     print("turn clock !")
     global status
     status = hr.turn_clockwise()
     update_KB()
 
-
+#ok
 def turn_toward(orientation):
     current_orientation = status["orientation"].value
     orientation = orientation.value
