@@ -10,7 +10,7 @@ from enum import Enum
 from itertools import product
 from typing import List, Tuple, Dict
 import sys
-
+from pprint import pprint
 print(f"Hitman Referee v{__version__}", file=sys.stderr)
 print(f"Please make sure you are using the latest version.", file=sys.stderr)
 
@@ -86,6 +86,43 @@ world_example = [
     [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
     [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
 ]
+
+world_example = [
+    [HC.GUARD_S, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.SUIT, HC.WALL, HC.WALL],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
+    [HC.TARGET, HC.WALL, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.CIVIL_N, HC.EMPTY],
+    [HC.WALL, HC.WALL, HC.EMPTY, HC.GUARD_E, HC.EMPTY, HC.CIVIL_E, HC.CIVIL_W],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
+    [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
+]
+
+import generateur_2 as g
+
+world_example = g.generer()
+
+world_example =  [
+    [HC.GUARD_S, HC.GUARD_S, HC.GUARD_S, HC.SUIT, HC.EMPTY, HC.EMPTY, HC.WALL],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.GUARD_W, HC.EMPTY],
+    [HC.TARGET, HC.WALL, HC.EMPTY, HC.EMPTY, HC.GUARD_W, HC.CIVIL_N, HC.EMPTY],
+    [HC.WALL, HC.WALL, HC.EMPTY, HC.GUARD_E, HC.EMPTY, HC.CIVIL_E, HC.CIVIL_W],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
+    [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
+]
+world_example =  [
+    [HC.GUARD_S, HC.GUARD_S, HC.GUARD_S, HC.SUIT, HC.EMPTY, HC.EMPTY, HC.WALL],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.GUARD_W, HC.EMPTY],
+    [HC.TARGET, HC.WALL, HC.EMPTY, HC.EMPTY, HC.GUARD_W, HC.CIVIL_N, HC.EMPTY],
+    [HC.WALL, HC.WALL, HC.EMPTY, HC.GUARD_E, HC.EMPTY, HC.CIVIL_E, HC.CIVIL_W],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
+    [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
+]
+
+
+g.affichage(world_example)
+'''world_example = [
+    [HC.EMPTY,HC.EMPTY,HC.GUARD_S],
+    [HC.EMPTY, HC.PIANO_WIRE, HC.TARGET ]
+]'''
 
 '''world_example = [
     [HC.PIANO_WIRE, HC.TARGET],
