@@ -35,7 +35,7 @@ class Type(Enum):
 
 type_nb = 8
 
-
+# ok, juste pour garde et civil c'est ça ? 
 def literal_from_cell(x: int, y: int, type: str, dir: HC) -> Literal:
     lit = 0
     if type not in ["g", 'c']:
@@ -56,9 +56,9 @@ def literal_from_cell(x: int, y: int, type: str, dir: HC) -> Literal:
 
 
 def literal_from_sound(x: int, y: int, sound: int) -> Literal:
-    lit = sound
+    lit = sound # et si plus de 5 personnes ? C'est quoi w? h ?
     lit += x * 6
-    lit += y * w * 6
+    lit += y * w * 6 
     lit += h * w * type_nb
     return lit + 1
 
@@ -97,8 +97,8 @@ def decode_literal(literal: int) -> (int, int, Type):
         literal %= type_nb
         return x, y, Type(literal)
 
-
-def get_initial_person_count_clauses(i: int,sign: int ,elts: list[int]) -> ClauseBase:
+# je veux bien des explications
+def get_initial_person_count_clauses(i: int,sign: int ,elts: list[int]) -> ClauseBase: 
     if (i == 0):
         return [[]]
     else:

@@ -142,8 +142,8 @@ class HitmanReferee:
         self.__filename = filename
         if filename == "":
             self.__world = world_example
-            self.__m = len(self.__world)
-            self.__n = len(self.__world[0])
+            self.__m = len(self.__world) #largeur (ou l'inverse)
+            self.__n = len(self.__world[0]) #hauteur
         else:
             raise NotImplementedError("TODO")
 
@@ -183,10 +183,11 @@ class HitmanReferee:
         # provisoire
         return self.__world[self.__m - y - 1][x]
 
-    def __get_listening(self, dist=2):
+    #qq questions
+    def __get_listening(self, dist=2): # le changer en 3 non ? Peut-être prendre le dernier code à jour, jsp si il a changé
         count = 0
         possible_offset = range(-dist, dist + 1)
-        offsets = product(possible_offset, repeat=2)
+        offsets = product(possible_offset, repeat=2) # c'est quoi product ? 
         x, y = self.__pos
         for i, j in offsets:
             pos_x, pos_y = x + i, y + j
@@ -207,7 +208,8 @@ class HitmanReferee:
                 break
 
         return count
-
+    
+    #ok
     def __get_offset(self):
         if self.__orientation == HC.N:
             offset = 0, 1
@@ -236,10 +238,10 @@ class HitmanReferee:
         return vision
 
     def move(self):
-        offset_x, offset_y = self.__get_offset()
+        offset_x, offset_y = self.__get_offset() #ok
         x, y = self.__pos
 
-        self.__phase1_penalties += 1
+        self.__phase1_penalties += 1 #ok
 
         if self.__get_world_content(x + offset_x, y + offset_y) not in [
             HC.EMPTY,
@@ -251,11 +253,11 @@ class HitmanReferee:
             HC.SUIT,
             HC.TARGET,
         ]:
-            self.__phase1_penalties += 5 * self.__seen_by_guard_num()
-            return self.__get_status_phase_1("Err: invalid move")
+            self.__phase1_penalties += 5 * self.__seen_by_guard_num() # car il reste au même endroit durant l'étape d'après donc se reprend des points de penalité
+            return self.__get_status_phase_1("Err: invalid move")#ok
 
         self.__pos = x + offset_x, y + offset_y
-        self.__phase1_penalties += 5 * self.__seen_by_guard_num()
+        self.__phase1_penalties += 5 * self.__seen_by_guard_num()#ok
 
         return self.__get_status_phase_1()
 
