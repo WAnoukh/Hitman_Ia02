@@ -88,6 +88,9 @@ world_example = [
     [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
 ]
 
+
+
+
 complete_map_example = {
     (0, 5): HC.EMPTY,
     (1, 5): HC.EMPTY,
@@ -139,8 +142,8 @@ class HitmanReferee:
         self.__filename = filename
         if filename == "":
             self.__world = world_example
-            self.__m = len(self.__world)
-            self.__n = len(self.__world[0])
+            self.__m = len(self.__world) #largeur (ou l'inverse)
+            self.__n = len(self.__world[0]) #hauteur
         else:
             raise NotImplementedError("TODO")
 
@@ -180,10 +183,11 @@ class HitmanReferee:
         # provisoire
         return self.__world[self.__m - y - 1][x]
 
-    def __get_listening(self, dist=2):
+    #qq questions
+    def __get_listening(self, dist=2): # le changer en 3 non ? Peut-être prendre le dernier code à jour, jsp si il a changé
         count = 0
         possible_offset = range(-dist, dist + 1)
-        offsets = product(possible_offset, repeat=2)
+        offsets = product(possible_offset, repeat=2) # c'est quoi product ? 
         x, y = self.__pos
         for i, j in offsets:
             pos_x, pos_y = x + i, y + j
@@ -204,7 +208,8 @@ class HitmanReferee:
                 break
 
         return count
-
+    
+    #ok
     def __get_offset(self):
         if self.__orientation == HC.N:
             offset = 0, 1
@@ -233,10 +238,10 @@ class HitmanReferee:
         return vision
 
     def move(self):
-        offset_x, offset_y = self.__get_offset()
+        offset_x, offset_y = self.__get_offset() #ok
         x, y = self.__pos
 
-        self.__phase1_penalties += 1
+        self.__phase1_penalties += 1 #ok
 
         if self.__get_world_content(x + offset_x, y + offset_y) not in [
             HC.EMPTY,
@@ -248,11 +253,11 @@ class HitmanReferee:
             HC.SUIT,
             HC.TARGET,
         ]:
-            self.__phase1_penalties += 5 * self.__seen_by_guard_num()
-            return self.__get_status_phase_1("Err: invalid move")
+            self.__phase1_penalties += 5 * self.__seen_by_guard_num() # car il reste au même endroit durant l'étape d'après donc se reprend des points de penalité
+            return self.__get_status_phase_1("Err: invalid move")#ok
 
         self.__pos = x + offset_x, y + offset_y
-        self.__phase1_penalties += 5 * self.__seen_by_guard_num()
+        self.__phase1_penalties += 5 * self.__seen_by_guard_num()#ok
 
         return self.__get_status_phase_1()
 
@@ -310,10 +315,10 @@ class HitmanReferee:
         for l in self.__world:
             for c in l:
                 if (
-                    c == HC.CIVIL_N
-                    or c == HC.CIVIL_E
-                    or c == HC.CIVIL_S
-                    or c == HC.CIVIL_W
+                        c == HC.CIVIL_N
+                        or c == HC.CIVIL_E
+                        or c == HC.CIVIL_S
+                        or c == HC.CIVIL_W
                 ):
                     count += 1
         return count
@@ -323,25 +328,25 @@ class HitmanReferee:
         for l in self.__world:
             for c in l:
                 if (
-                    c == HC.GUARD_N
-                    or c == HC.GUARD_E
-                    or c == HC.GUARD_S
-                    or c == HC.GUARD_W
+                        c == HC.GUARD_N
+                        or c == HC.GUARD_E
+                        or c == HC.GUARD_S
+                        or c == HC.GUARD_W
                 ):
                     count += 1
         return count
 
     def __compute_civils(
-        self,
+            self,
     ) -> Dict[Tuple[int, int], List[Tuple[Tuple[int, int], HC]]]:
         locations = {}
         for l_index, l in enumerate(self.__world):
             for c_index, c in enumerate(l):
                 if (
-                    c == HC.CIVIL_N
-                    or c == HC.CIVIL_E
-                    or c == HC.CIVIL_S
-                    or c == HC.CIVIL_W
+                        c == HC.CIVIL_N
+                        or c == HC.CIVIL_E
+                        or c == HC.CIVIL_S
+                        or c == HC.CIVIL_W
                 ):
                     civil_x, civil_y = (c_index, self.__m - l_index - 1)
                     locations[(civil_x, civil_y)] = self.__get_civil_vision(
@@ -382,22 +387,22 @@ class HitmanReferee:
             count += (
                 1
                 if len([0 for ((l, c), _) in self.__civils[civil] if l == x and c == y])
-                > 0
+                   > 0
                 else 0
             )
         return count
 
     def __compute_guards(
-        self,
+            self,
     ) -> Dict[Tuple[int, int], List[Tuple[Tuple[int, int], HC]]]:
         locations = {}
         for l_index, l in enumerate(self.__world):
             for c_index, c in enumerate(l):
                 if (
-                    c == HC.GUARD_N
-                    or c == HC.GUARD_E
-                    or c == HC.GUARD_S
-                    or c == HC.GUARD_W
+                        c == HC.GUARD_N
+                        or c == HC.GUARD_E
+                        or c == HC.GUARD_S
+                        or c == HC.GUARD_W
                 ):
                     guard_x, guard_y = (c_index, self.__m - l_index - 1)
                     locations[(guard_x, guard_y)] = self.__get_guard_vision(
@@ -448,7 +453,7 @@ class HitmanReferee:
                     if len(
                         [0 for ((l, c), _) in self.__guards[guard] if l == x and c == y]
                     )
-                    > 0
+                       > 0
                     else 0
                 )
         self.__is_in_guard_range = count > 0

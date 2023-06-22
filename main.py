@@ -1,16 +1,16 @@
-# This is a sample Python script.
+from hitman import HC, HitmanReferee, complete_map_example
+from typing import List, Tuple, Dict
 
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from phase1 import *
+
+def main():
+    update_KB()
+    idiot_route(True)
+    send_soluce()
+    complete_map_example[(7, 0)] = HC.EMPTY
+    pass
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    #print_vision_KB()
+    main()
