@@ -168,6 +168,6 @@ def generer():
 
 # Afficher la grille
 grille=generer()
-affic=affichage(grille)
-for ligne in affic:
-    print(' '.join(ligne))
+#affic=affichage(grille)
+#for ligne in affic:
+#    print(' '.join(ligne))
