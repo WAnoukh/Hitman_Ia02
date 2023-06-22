@@ -32,7 +32,7 @@ def print_vision_RM():
 #pas trop compris
 def update_KB():
     for (x, y), cell in status["vision"]:
-        vision_KB[y][x] = cell
+        vision_KB[y][x] = cell # cell = ce que contient la case
     # print_vision_KB()
     # pprint(status)
 
