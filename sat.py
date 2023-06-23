@@ -176,10 +176,10 @@ def at_most_person(i: int, elts: list[list[int]]) -> ClauseBase:
     for c in range(len(li)):
         for l2 in li2:
             nc = []
-            c = 0
+            c2 = 0
             for l in li[c]:
-                nc.append(-elts[l][l2[c]])
-                c+=1
+                nc.append(-elts[l][l2[c2]])
+                c2+=1
             cb.append(nc)
     return cb
 
@@ -197,9 +197,14 @@ def generate_person_literals(type: str) -> list[list[Literal]]:
 def get_initial_guard_count_clauses() -> ClauseBase:
     lts = generate_person_literals("g")
     total = w * h * guard_count
-    p = at_least_person(guard_count, lts)
-    n = at_most_person(guard_count, lts)
-    return p + n
+    l = at_least_person(guard_count, lts)
+    m = at_most_person(guard_count, lts)
+    o = [] #qu'une seule direction par case
+    for position in lts:
+        n_pos = [[e] for e in position]
+        o += at_most_person(1,n_pos)
+
+    return l + m + o
 
 
 def init_KB(nw: int, nh: int, new_guard_count: int, new_civil_count: int):
