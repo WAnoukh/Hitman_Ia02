@@ -23,8 +23,8 @@ class Type(Enum):
     CIVIL_E = 5
     CIVIL_S = 6
     CIVIL_W = 7
-    SEEN_0 = 8
-    SEEN_1 = 9
+    SEEN_G = 8
+    SEEN_C = 9
     SOUND_0 = 10
     SOUND_1 = 11
     SOUND_2 = 12
@@ -64,6 +64,7 @@ def literal_from_sound(x: int, y: int, sound: int) -> Literal:
 
 
 def literal_from_seen(x: int, y: int, seen: int) -> Literal:
+    #seen = 0 -> guard , 1 -> civil
     lit = seen
     lit += x * 2
     lit += y * w * 2
