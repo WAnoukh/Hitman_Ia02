@@ -10,8 +10,8 @@ ClauseBase = List[Clause]
 Model = List[Literal]
 
 KB: ClauseBase
-w, h = 1, 1
-guard_count, civil_count = 1, 1
+w, h = 2, 1
+guard_count, civil_count = 0, 0
 
 
 class Type(Enum):
@@ -23,8 +23,8 @@ class Type(Enum):
     CIVIL_E = 5
     CIVIL_S = 6
     CIVIL_W = 7
-    SEEN_0 = 8
-    SEEN_1 = 9
+    SEEN_G = 8
+    SEEN_C = 9
     SOUND_0 = 10
     SOUND_1 = 11
     SOUND_2 = 12
@@ -64,6 +64,7 @@ def literal_from_sound(x: int, y: int, sound: int) -> Literal:
 
 
 def literal_from_seen(x: int, y: int, seen: int) -> Literal:
+    #seen = 0 -> guard , 1 -> civil
     lit = seen
     lit += x * 2
     lit += y * w * 2
@@ -119,25 +120,92 @@ def get_initial_person_count_clauses(i: int,sign: int ,elts: list[int]) -> Claus
                         break
                 if not case_already_taken:
                     nc.append(sign * elts[k])
-                    newCb.append(nc)
-        return newCb
+                    newCb.append(nc)        
+
+    return get_initial_person_count_clauses(2,1,elts)
+
+def k_parmis_n(n:int,k:int):
+    if k > n or k == 0:
+        return [[]]
+    l = k_parmis_n(n,k-1)
+    nl = []
+    for e in l:
+        for j in range(n):
+            if j not in e:
+                if len(e) >0 :
+                    if e[-1] >= j:
+                        continue
+                ne = e[:]
+                ne.append(j)
+                nl.append(ne)
+    return nl
+
+def count(n,k):
+    if k <= 0:
+        return [[]]
+    l = count(n,k-1)
+    nl = []
+    for e in l:
+        for i in range(n):
+            ne = e[:]
+            ne.append(i)
+            nl.append(ne)
+    return nl
 
 
-def generate_person_literals(type: str) -> list[Literal]:
+
+def at_least_person(i: int, elts: list[list[int]]) -> ClauseBase:
+    if (i == 0):
+        return [[]]
+    else:
+        cb = []
+        li = k_parmis_n(len(elts), len(elts)-i+1)
+        for c in range(len(li)):
+            nc = []
+            for l in li[c]:
+                for e in range(len(elts[l])):
+                    nc.append(elts[l][e])
+            cb.append(nc)
+        return cb
+
+def at_most_person(i: int, elts: list[list[int]]) -> ClauseBase:
+    print(elts)
+    cb = []
+    li = k_parmis_n(len(elts), i+1)
+    li2 = count(len(elts[0]), len(li[0]))
+    print("li",li)
+    for c in range(len(li)):
+        for l2 in li2:
+            nc = []
+            c2 = 0
+            for l in li[c]:
+                nc.append(-elts[l][l2[c2]])
+                c2+=1
+            cb.append(nc)
+    return cb
+
+def generate_person_literals(type: str) -> list[list[Literal]]:
     l = []
     for x in range(w):
         for y in range(h):
+            l2 = []
             for t in [HC.N, HC.E, HC.S, HC.W]:
-                l.append(literal_from_cell(x, y, type, t))
+                l2.append(literal_from_cell(x, y, type, t))
+            l.append(l2)
     return l
 
 
 def get_initial_guard_count_clauses() -> ClauseBase:
     lts = generate_person_literals("g")
     total = w * h * guard_count
-    p = get_initial_person_count_clauses(len(lts) - guard_count+1, 1, lts)
-    n = get_initial_person_count_clauses(guard_count+1 , -1, lts)
-    return p + n
+    l = at_least_person(guard_count, lts)
+    m = at_most_person(guard_count, lts)
+    o = [] #qu'une seule direction par case
+    for position in lts:
+        n_pos = [[e] for e in position]
+        o += at_most_person(1,n_pos)
+
+    return l + m + o
 
 
 def init_KB(nw: int, nh: int, new_guard_count: int, new_civil_count: int):
@@ -150,11 +218,10 @@ def init_KB(nw: int, nh: int, new_guard_count: int, new_civil_count: int):
 if __name__ == '__main__':
     cb: ClauseBase = get_initial_guard_count_clauses()
     for c in cb:
-        print("[", end=" ")
+        print("[")
         for l in c:
             if l < 0:
                 print("non", end=" ")
                 l *= -1
-            print(decode_literal(l), end=" ")
+            print(decode_literal(l))
         print("]")
-    print()
