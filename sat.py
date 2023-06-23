@@ -35,7 +35,7 @@ class Type(Enum):
 
 type_nb = 8
 
-# ok, juste pour garde et civil c'est ça ? 
+# juste pour garde et civil 
 def literal_from_cell(x: int, y: int, type: str, dir: HC) -> Literal:
     lit = 0
     if type not in ["g", 'c']:
