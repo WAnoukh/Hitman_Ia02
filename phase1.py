@@ -1,15 +1,18 @@
 from hitman import HC, HitmanReferee, complete_map_example
 from pprint import pprint
+import subprocess
+from typing import Tuple, List
+
 # from sat import *
 import time
 
-hr: HitmanReferee = HitmanReferee()
+hr : HitmanReferee = HitmanReferee()
 status = hr.start_phase1()
 directions = [(0, 1, HC.N), (1, 0, HC.E), (0, -1, HC.S), (-1, 0, HC.W)]
 solid_cells = [HC.WALL, HC.GUARD_E, HC.GUARD_S, HC.GUARD_W, HC.GUARD_N, HC.GUARD_N, None]
 vision_KB = [[None] * status['n'] for _ in range(status['m'])]
 route_map = [[0] * status['n'] for _ in range(status['m'])]
-
+KB = []
 
 def printMat(mat):
     print("+++++++++++++++++++++++++++++++++++++++++++++++++++")
@@ -29,12 +32,22 @@ def print_vision_RM():
     cpy = [c[:] for c in reversed(route_map)]
     printMat(cpy)
 
+
+def add_to_KB_clauses_List(clauses_list : List[List[str]]) :
+    for c in clauses_list : 
+        KB.append(c)
+
+def add_to_KB_clause(clause : List[str]) :
+    KB.append(clause)
+
 #pas trop compris
 def update_KB():
     for (x, y), cell in status["vision"]:
         vision_KB[y][x] = cell # cell = ce que contient la case
+        litteral = str()   # a finir
     # print_vision_KB()
     # pprint(status)
+
 
 
 def move():
@@ -167,3 +180,34 @@ def send_soluce():
             sol[(j, i)] = vision_KB[i][j]
     pprint(hr.send_content(sol))
     print(status["penalties"])
+
+
+
+####### Creer un fichier .cnf a partir de la KB et le solve via gophersat #######
+
+def write_dimacs_file(dimacs: str, filename: str):
+    with open(filename, "w", newline="") as cnf:
+        cnf.write(dimacs)
+
+
+def exec_gophersat(filename: str, cmd: str = "gophersat", encoding: str = "utf8") -> Tuple[bool, List[int]]:
+    result = subprocess.run(
+        [cmd, filename], capture_output=True, check=True, encoding=encoding
+    )
+    string = str(result.stdout)
+    lines = string.splitlines()
+
+    if lines[1] != "s SATISFIABLE":
+        return False, []
+
+    model = lines[2][2:-2].split(" ")
+
+    return True, [int(x) for x in model]
+
+
+# Exemple d'utilisation
+# cnf_formula = "p cnf 3 2\n1 2 0\n-2 -3 0\n"
+# file_name = "test.cnf"
+# write_dimacs_file(cnf_formula, file_name)
+# solution = exec_gophersat(file_name)
+# print("Solution :", solution)
