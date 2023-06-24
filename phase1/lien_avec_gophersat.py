@@ -5,13 +5,13 @@ from typing import Tuple, List
 
 # à décommenter pour tester 
 
-# def clauses_to_dimacs(clauses: ClauseBase, nb_vars: int) -> str:
-#     s = "p cnf {} {}\n".format(nb_vars, len(clauses))
-#     for clause in clauses:
-#         for literal in clause:
-#             s += str(literal) + " "
-#         s += "0\n"
-#     return s
+def clauses_to_dimacs(clauses, nb_vars):
+    s = "p cnf {} {}\n".format(nb_vars, len(clauses))
+    for clause in clauses:
+        for literal in clause:
+            s += str(literal) + " "
+        s += "0\n"
+    return s
 
 
 
@@ -42,7 +42,7 @@ def exec_gophersat(filename: str, cmd: str = "gophersat", encoding: str = "utf8"
 # Exemple d'utilisation
 if __name__ == '__main__':
     cnf_formula = "p cnf 3 2\n1 2 0\n-2 -3 0\n"
-    file_name = "test.cnf"
+    file_name = "../test.cnf"
     write_dimacs_file(cnf_formula, file_name)
     solution = exec_gophersat(file_name)
     print("Solution :", solution)

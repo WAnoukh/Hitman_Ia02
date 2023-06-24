@@ -1,10 +1,9 @@
-from hitman import HC, HitmanReferee, complete_map_example
+from hitman.hitman import HC
 from pprint import pprint
 import subprocess
 from typing import Tuple, List
 
 # from sat import *
-import time
 
 hr = None
 status = None
@@ -34,7 +33,7 @@ def print_vision_RM():
 
 
 def add_to_KB_clauses_List(clauses_list : List[List[str]]) :
-    for c in clauses_list : 
+    for c in clauses_list :
         KB.append(c)
 
 def add_to_KB_clause(clause : List[str]) :

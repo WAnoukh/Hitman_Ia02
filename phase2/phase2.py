@@ -1,4 +1,4 @@
-from hitman import HC
+from hitman.hitman import HC
 from copy import deepcopy
 from enum import Enum
 
