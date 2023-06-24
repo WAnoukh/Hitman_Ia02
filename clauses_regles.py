@@ -1,5 +1,27 @@
+from enum import Enum
+from itertools import product, combinations
+from typing import List, Tuple, Dict
+import sys
+
 #  typage clauses : abcisse_ordonnée_élément
 #  ex : 0_0_1
+
+
+class Elt (Enum):
+    EMPTY = 1
+    WALL = 2
+    GUARD_N = 3
+    GUARD_E = 4
+    GUARD_S = 5
+    GUARD_W = 6
+    CIVIL_N = 7
+    CIVIL_E = 8
+    CIVIL_S = 9
+    CIVIL_W = 10
+    TARGET = 11
+    SUIT = 12
+    PIANO_WIRE = 13
+
 class Nb_elt (Enum):
     EMPTY = 1
     WALL = 2
