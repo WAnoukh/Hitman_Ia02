@@ -10,8 +10,8 @@ ClauseBase = List[Clause]
 Model = List[Literal]
 
 KB: ClauseBase
-w, h = 2, 1
-guard_count, civil_count = 0, 0
+w, h = 1, 1
+guard_count, civil_count = 0, 1
 
 
 class Type(Enum):
@@ -153,7 +153,6 @@ def count(n,k):
     return nl
 
 
-
 def at_least_person(i: int, elts: list[list[int]]) -> ClauseBase:
     if (i == 0):
         return [[]]
@@ -194,18 +193,35 @@ def generate_person_literals(type: str) -> list[list[Literal]]:
             l.append(l2)
     return l
 
-
-def get_initial_guard_count_clauses() -> ClauseBase:
-    lts = generate_person_literals("g")
-    total = w * h * guard_count
-    l = at_least_person(guard_count, lts)
-    m = at_most_person(guard_count, lts)
-    o = [] #qu'une seule direction par case
-    for position in lts:
+def get_initial_person_count_clauses() -> ClauseBase:
+    glts = generate_person_literals("g")
+    gl = at_least_person(guard_count, glts)
+    gm = at_most_person(guard_count, glts)
+    go = [] #qu'une seule direction par case
+    n_pos = []
+    for position in glts:
         n_pos = [[e] for e in position]
-        o += at_most_person(1,n_pos)
+        go += at_most_person(1,n_pos)
 
-    return l + m + o
+    clts = generate_person_literals("c")
+    cl = at_least_person(civil_count, clts)
+    cm = at_most_person(civil_count, clts)
+    co = []  # qu'une seule direction par case
+    n_pos = []
+    for position in clts:
+        n_pos = [[e] for e in position]
+        co += at_most_person(1, n_pos)
+
+    n_pos = []
+    for i in range(len(clts)):
+        n_pos = [[e] for e in clts[i] + glts[i]]
+        co += at_most_person(1, n_pos)
+
+
+    return gl + gm + go + cl + cm + co
+
+
+
 
 
 def init_KB(nw: int, nh: int, new_guard_count: int, new_civil_count: int):
@@ -216,7 +232,7 @@ def init_KB(nw: int, nh: int, new_guard_count: int, new_civil_count: int):
 
 
 if __name__ == '__main__':
-    cb: ClauseBase = get_initial_guard_count_clauses()
+    cb: ClauseBase = get_initial_person_count_clauses()
     for c in cb:
         print("[")
         for l in c:
