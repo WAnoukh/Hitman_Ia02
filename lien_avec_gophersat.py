@@ -40,9 +40,9 @@ def exec_gophersat(filename: str, cmd: str = "gophersat", encoding: str = "utf8"
 
 
 # Exemple d'utilisation
-
-cnf_formula = "p cnf 3 2\n1 2 0\n-2 -3 0\n"
-file_name = "test.cnf"
-write_dimacs_file(cnf_formula, file_name)
-solution = exec_gophersat(file_name)
-print("Solution :", solution)
+if __name__ == '__main__':
+    cnf_formula = "p cnf 3 2\n1 2 0\n-2 -3 0\n"
+    file_name = "test.cnf"
+    write_dimacs_file(cnf_formula, file_name)
+    solution = exec_gophersat(file_name)
+    print("Solution :", solution)

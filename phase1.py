@@ -6,12 +6,12 @@ from typing import Tuple, List
 # from sat import *
 import time
 
-hr : HitmanReferee = HitmanReferee()
-status = hr.start_phase1()
-directions = [(0, 1, HC.N), (1, 0, HC.E), (0, -1, HC.S), (-1, 0, HC.W)]
-solid_cells = [HC.WALL, HC.GUARD_E, HC.GUARD_S, HC.GUARD_W, HC.GUARD_N, HC.GUARD_N, None]
-vision_KB = [[None] * status['n'] for _ in range(status['m'])]
-route_map = [[0] * status['n'] for _ in range(status['m'])]
+hr = None
+status = None
+directions = None
+solid_cells =None
+vision_KB = None
+route_map = None
 KB = []
 
 def printMat(mat):
@@ -211,3 +211,18 @@ def exec_gophersat(filename: str, cmd: str = "gophersat", encoding: str = "utf8"
 # write_dimacs_file(cnf_formula, file_name)
 # solution = exec_gophersat(file_name)
 # print("Solution :", solution)
+
+def phase1_run(n_hr,n_status):
+    global hr, status,directions,solid_cells,vision_KB,route_map
+    hr = n_hr
+    status = n_status
+
+    directions = [(0, 1, HC.N), (1, 0, HC.E), (0, -1, HC.S), (-1, 0, HC.W)]
+    solid_cells = [HC.WALL, HC.GUARD_E, HC.GUARD_S, HC.GUARD_W, HC.GUARD_N, HC.GUARD_N, None]
+    vision_KB = [[None] * status['n'] for _ in range(status['m'])]
+    route_map = [[0] * status['n'] for _ in range(status['m'])]
+
+    update_KB()
+    idiot_route(True)
+    send_soluce()
+    pass
