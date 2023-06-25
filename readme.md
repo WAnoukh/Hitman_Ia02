@@ -3,6 +3,7 @@ DUPRE Manon - WACHNICKI Anoukhan
 
 <br><br><br>  
 # Sommaire : 
+- Faire fonctionner le projet
 - Modélisation STRIPS 
 - Fonctionnement de notre projet 
   - Phase 1
@@ -13,6 +14,14 @@ DUPRE Manon - WACHNICKI Anoukhan
     - Forces et faiblesses
 
 <br><br><br> 
+
+# Faire fonctionner le projet
+
+Il est important de :
+* **Exécuter** le fichier **main.py**
+* Que l'**arbitre** soit localisé dans le fichier **./hitman/hitman.py** relativement a main.py et se nomme **HitmanReferee**. (a moins de changer tout les 'from hitman.hitman import HitmanReferee' par l'importation voulue)
+* Que gophersat.exe soit présent dans le même dossier que main.py (En réalité il n'est pas utilisé dans le projet, c'est seulement si vous voulez tester les fonctions présentes du SAT)
+
 
 # Modélisation STRIPS 
 

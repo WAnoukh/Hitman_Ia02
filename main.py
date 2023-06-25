@@ -6,12 +6,6 @@ from hitman.hitman import HitmanReferee
 from phase1.phase1 import main,phase1_run
 
 if __name__ == '__main__':
-    #main()
-
-
-
-
-    #real thing to do
     hr = HitmanReferee()
     status = hr.start_phase1()
     phase1_run(hr,status)
