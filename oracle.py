@@ -10,6 +10,7 @@ from enum import Enum
 from itertools import product
 from typing import List, Tuple, Dict
 import sys
+from hitman.hitman import HC
 
 print(f"Hitman Referee v{__version__}", file=sys.stderr)
 print(f"Please make sure you are using the latest version.", file=sys.stderr)
@@ -57,31 +58,21 @@ MMMSMMMMSSSSP   `MMMM     ;.;   :MMMMMMMMM;
 '''
 
 
-# Hitman constants
-class HC(Enum):
-    EMPTY = 1
-    WALL = 2
-    GUARD_N = 3
-    GUARD_E = 4
-    GUARD_S = 5
-    GUARD_W = 6
-    CIVIL_N = 7
-    CIVIL_E = 8
-    CIVIL_S = 9
-    CIVIL_W = 10
-    TARGET = 11
-    SUIT = 12
-    PIANO_WIRE = 13
-    N = 14
-    E = 15
-    S = 16
-    W = 17
 
 
 # Provisoire...
 world_example = [
-    [HC.EMPTY, HC.PIANO_WIRE, HC.TARGET]
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.SUIT, HC.GUARD_S, HC.WALL, HC.WALL],
+    [HC.EMPTY, HC.WALL, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
+    [HC.TARGET, HC.WALL, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.CIVIL_N, HC.EMPTY],
+    [HC.WALL, HC.WALL, HC.EMPTY, HC.GUARD_E, HC.EMPTY, HC.CIVIL_E, HC.CIVIL_W],
+    [HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY, HC.EMPTY],
+    [HC.EMPTY, HC.EMPTY, HC.WALL, HC.WALL, HC.EMPTY, HC.PIANO_WIRE, HC.EMPTY],
 ]
+
+def set_world_exemple(map):
+    global world_example
+    world_example = map
 
 complete_map_example = {
     (0, 5): HC.EMPTY,
@@ -129,7 +120,7 @@ complete_map_example = {
 }
 
 
-class HitmanReferee:
+class Oracle:
     def __init__(self, filename: str = "") -> None:
         self.__filename = filename
         if filename == "":
@@ -289,7 +280,7 @@ class HitmanReferee:
             raise ValueError("Err: invalid phase")
 
         self.__add_history("Move")
-
+        c = self.__get_world_content(x + offset_x, y + offset_y)
         if (
             not (0 <= x + offset_x < self.__n)
             or not (0 <= y + offset_y < self.__m)
@@ -549,7 +540,7 @@ class HitmanReferee:
         return self.__get_status_phase_2()
 
     def __repr__(self) -> str:
-        return f"HitmanReferee({self.__filename})"
+        return f"Oracle({self.__filename})"
 
     def __str__(self) -> str:
         return ASCII_ART

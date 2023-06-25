@@ -299,11 +299,8 @@ def init_KB(status):
     global w, h, guard_count, civil_count
     w, h = status["n"], status["m"]
     print("w :", w, "h:", h)
-    w, h = 1, 3
     guard_count = status["guard_count"]
     civil_count = status["civil_count"]
-    guard_count = 1
-    civil_count = 1
     print("g :", guard_count, "c:", civil_count)
     return get_initial_person_count_clauses()
 

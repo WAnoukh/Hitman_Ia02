@@ -124,7 +124,6 @@ def idiot_route(first=False):
     print("searching empty")
     width, height = status['n'], status['m']
     while True:
-        fwrd_cell = get_cell_forward()
         rx, ry = cardinal_to_dir(status["orientation"])
         x, y = status["position"]
         x2, y2 = x + rx, y + ry

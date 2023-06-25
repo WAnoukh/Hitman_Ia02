@@ -1,6 +1,7 @@
 from hitman.hitman import HC
 from copy import deepcopy
 from enum import Enum
+from oracle import set_world_exemple, Oracle
 
 target_x, target_y = (0, 1)
 start_x, start_y = (0, 0)
@@ -183,28 +184,40 @@ def print_path(state):
 
 def A_star(hr, status):
     initial_state = State(hr, status, euristic(hr, status), None, None)
-    push_state(initial_state)
+    #push_state(initial_state)
     save = [initial_state.status]
     state = initial_state
-    i=0
+    i = 0
     while not is_goal(state):
         for suc in succ(state):
             edited_status = suc.status.copy()
             edited_status["penalties"] = 0
-            #we are doing this because we want to not being in the same place with everything else the same, because it's
-            #mean that we are doing the same thing but with more penalties
-            #so we are saving status with 0 penalties to only check if something else is different
+            # we are doing this because we want to not being in the same place with everything else the same, because it's
+            # mean that we are doing the same thing but with more penalties
+            # so we are saving status with 0 penalties to only check if something else is different
             if edited_status not in save:
                 save.append(edited_status)
                 push_state(suc)
+        if len(states) == 0:
+            break
+
+        # print(i,end=" ")
+
+        print_path(state)
+        for s in succ(state):
+            print("|->",end=" ")
+            print_path(s)
+        print("------------")
+        for s in states:
+            print("         |",end=" ")
+            print_path(s)
+        print("------------")
         state = pop_state()
-        #print(i,end=" ")
-        #print_path(state)
-        i+=1
+        i += 1
         # prin
-    print("finished in",i,"iterations !")
+    print("finished in", i, "iterations !")
     print("with", state.status["penalties"], "penalties !")
-    print("Score :", state.status["penalties"]/i)
+    print("Score :", state.status["penalties"] / i)
     return state
 
 
@@ -218,15 +231,20 @@ def search_map(map, status):
             elif map[(x, y)] == HC.TARGET:
                 target_x, target_y = x, y
 
+from pprint import pprint
 
 def phase2_run(hr, status, map):
     search_map(map, status)
-    state = A_star(hr, status)
+    set_world_exemple( [[map[(x, y)] for x in range(status['n'])] for y in range(status['m'])])
+    print([[map[(x, y)] for x in range(status['n'])] for y in range(status['m'])])
+    oracle = Oracle()
+    o_status = oracle.start_phase2()
+    state = A_star(oracle, o_status)
     print("\n\n\n\nFINAL :")
     print_path(state)
 
     for st in get_state_path(state):
         status = execute_action(hr, status, st.method)
-        #print(action_name_from_state(st))
-        #pprint(status)
+        # print(action_name_from_state(st))
+        # pprint(status)
     return
