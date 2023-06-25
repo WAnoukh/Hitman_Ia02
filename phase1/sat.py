@@ -79,7 +79,7 @@ def literal_from_seen(x: int, y: int, seen: int) -> Literal:
     return lit + 1
 
 
-def decode_literal(literal: int) -> (int, int, Type):
+def decode_literal(literal: int) :
     x: int
     y: int
     type: Type
