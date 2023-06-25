@@ -3,6 +3,7 @@ from hitman.hitman import HitmanReferee
 from phase1.lien_avec_gophersat import *
 from Astar import A_star, print_path, get_state_path, execute_action
 from pprint import pprint
+from copy import deepcopy
 
 hr, status = None, None
 sat_kb = []
@@ -21,14 +22,66 @@ def update_kb(status, first=False):
         if map[y][x] is None:
             guessed += 1
         map[y][x] = type
-        #ajouter à la kb sat ce qu'on
+
+#add to kb what Hitman sees
+    # if hitman watch toward north or south
+    if hitman->HC.N or hitman->HC.S : 
+        ry = 1
+        # while there is nothing to stop the view, hitman watch further (until 3 tiles)
+        while (ry <= 3) and (case(x, y+ry) == type) and (type in [HC.EMPTY, HC.SUIT, HC.PIANO_WIRE]) : # pas sûre que ça marche
+            if hitman->HC.N :
+                add_to_kb(literal_from_cell_and_type(x, y+ry, type ))
+            if hitman->HC.S :
+                add_to_kb(literal_from_cell_and_type(x, y-ry, type ))
+            ry += 1
+
+    # if hitman watch toward West or East
+    if hitman->HC.E or hitman->HC.W : 
+        rx = 1
+        # while there is nothing to stop the view, hitman watch further (until 3 tiles)
+        while (rx <= 3) and (case(x + rx, y) == type) and (type in [HC.EMPTY, HC.SUIT, HC.PIANO_WIRE]) : 
+            if hitman->HC.E :
+                add_to_kb(literal_from_cell_and_type(x + rx, y, type ))
+            if hitman->HC.W :
+                add_to_kb(literal_from_cell_and_type(x - rx, y, type ))
+            rx += 1
+
+
+
     x, y = status["position"]
     add_to_kb(-literal_from_cell(x, y, "g", None))
 
     add_to_kb(literal_from_sound(x, y, status["hear"]))
 
 
-    #ici
+    #Use SAT solver to know if we can deduct that an unknown tile hosts a guard
+    # KB + not guard on an unknown tile   -->  if it is unsat, we know that there is a guard on this tile 
+    # if we know there is a guard on this tile, we have to know its direction so we test with HC.N, HC.S, HC.W, HC.E
+    # when we have     KB + not guard with a direction --> unsat    we know the direction of the guard
+    for x,y in unknown_tiles :
+        
+        sat_test = deepcopy(sat_kb)
+        sat_test.append(f"-{literal_from_cell(x, y, 'g', None)}") 
+
+        dimacs_string = clauses_to_dimacs(sat_test, h*w*len(Type))
+        file_name = "../test.cnf"
+        write_dimacs_file(dimacs_string, file_name)
+
+        directions = [None, HC.N, HC.S, HC.W, HC.E]
+        j = 0
+        while (j == 0 and exec_gophersat(file_name) == False ) or (0 < j and j < 5 and exec_gophersat(file_name) != False) :
+            sat_test = deepcopy(sat_kb)
+            dimacs_string = clauses_to_dimacs(sat_test, h*w*len(Type))
+            sat_test.append(f"-{literal_from_cell(x, y, 'g', directions[j])}") 
+            write_dimacs_file(dimacs_string, file_name)
+            j += 1
+        
+        if j < 1 and 4 < j :
+            add_to_kb(literal_from_cell(x, y, "g", directions[j]))
+            
+
+
+
 
 
     print(guessed * 2, "point against ", status["penalties"], "penalities ! Score",guessed * 2- status["penalties"] )
