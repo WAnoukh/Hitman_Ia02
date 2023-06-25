@@ -187,6 +187,8 @@ Les successeurs des états sont tout les "status" que l'on peut obtenir après a
 <br>.
 Nous filtrons cependant les status qui sont invalides (avoir avancé sur un mur ou avoir récupéré un objet qui n'est pas présent) ou les status qui résulte d'actions stupides (tourner 3 fois dans la même direction, tourner dans un sens puis dans l'autre, retourner à un emplacement qu'on a quitté avec une direction différente alors que nous avons effectué aucune action significative)
 
+Pour générer ces **"status"** et les pénalités qui vont avec, nous utilisons un **Oracle** (classe identique à HitmanReferee) sur lequel un execute les actions voulues.
+
 L'Heuristique est calculée comme suit :
 * L'heuristique initialisée au nombre de pénalités (en effet on cherche à les minimiser)
 * Si Hitman n'a pas pris la corde, on rajoute à l'heuristique la **distance** de Manhattan entre **hitman** et la **corde** ainsi que de la **distance** entre la **corde** et la **cible**.<br>On rajoute aussi **+4**
