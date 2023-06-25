@@ -147,23 +147,63 @@ DUPRE Manon - Anoukhan Wachnicki
 ## Phase 1
     
 ### Fonctionnement de la phase
-    ...
+La phase 1 fonctionne de la manière suviante:
+* On initialise une carte "vide" qui vas nous servir de base de connaissance.
+* Après chaque déplacement, nous la complétons avec ce qu'Hitman voit.
+* Pour le déplacement, nous cherchons une case de la carte dont le contenu est encore inconnue (la plus proche possible). Ensuite nous lançons un A* afin de chercher un chemin efficace jusqu'a cette case (en supposant que les cases encore inconnue sont des cases du type HC.EMPTY). Nous allons ensuite effectuer uniquement la première action du chemin du A* afin de prendre en compte les informations nouvellement dévoilées. 
+<br>Une fois les nouvelles informations enregistrées dans notre carte des connaissances, nous relançons un autre A* vers la même case que précédemment. Une fois cette case finalement atteinte, nous en choisissons une autre, ainsi de suite jusqu'à avoir tout découvert.
 
+Le fonctionnement du A* sera expliqué dans la Phase 2
+
+Toutes les fonctions nécessaires à l'ajout de déduction SAT sont quasiment présentes :
+* L'ajout de clause lors de l'exploration
+* L'initialisation de la base de clause avec les règles du jeu (sauf pour ce qui est de lier les cases où l'on se fait voir par un garde et la présence de garde)
+
+Nous avons pris comme littéraux :
+* **Les gardes** (avec un literal pour chaques position et orientation possible)
+* **Un garde simple** (comme avant mais sans prendre en compte l'orientation du garde, des CNF permettent de codes qu'un garde simple equivalent à un unique garde nord, sud, est ou ouest)
+* La même chose pour les **civils**
+* Une clause **seen** qui permet de renseigner si on s'est fait voir par un guard sur une case particulière (dérivé pour chaque position)
+* Une clause **sound** qui permet de renseigner le nombre de personnes entendu sur une case (dérivé aussi pour chaque position)
+
+Nous n'avons pas finalisé l'implémentation du SAT car nous n'avons pas codé la génération des clauses liant les littéraux **seen** des **gardes**. Mais nous comptions faire une déduction avant de lancer un A* pour trouver le chemins vers une case inconnue afin de choisir une autre case si on pouvait déduire le type de la case précédente.
 <br>
 
 ### Forces et faiblesses
-    ...
+Sytème assez rapide, cependant vers la fin de son exécution, quand les cases inconnues sont peu nombreuses, elles ont tendance à être très éparpillées et hitman aura tendance à faire des allés retours inutiles. C'est ici que le SAT aurait été très utiles car ces cases isolé sont donc très probablement déductible.
 
 <br> <br>
 
 ## Phase 2
 
 ### Fonctionnement de la phase
-    ...
+La phase 2 est entièrement réalisé par un **A***.
 
+Les états sont identifiés par le **"status"** renvoyé par l'HitmanReferee (avec la pénalité mise à 0). En effet, le status permet de définir parfaitement la situation de la phase 2 et le fait d'annuler les pénalité es permet de se rendre compte quand deux chemin mènent vers le même "status" et comparer leurs heuristiques pour décider du meilleur chemin.
+
+Les états de succès (celui qui termine la recherche) sont ceux où hitman est en (0,0) et à tué sa cible (is_target_down est vrai). Pour le A* utilisé dans la phase 1 les états finaux sont ceux ou hitman à atteint la case voulue.
+
+Les successeurs des états sont tout les "status" que l'on peut obtenir après avoir effectué une action comme un déplacement ou bien un ramassage d'objet ou l'enfilage de combinaison (et toutes les autres).
+<br>.
+Nous filtrons cependant les status qui sont invalides (avoir avancé sur un mur ou avoir récupéré un objet qui n'est pas présent) ou les status qui résulte d'actions stupides (tourner 3 fois dans la même direction, tourner dans un sens puis dans l'autre, retourner à un emplacement qu'on a quitté avec une direction différente alors que nous avons effectué aucune action significative)
+
+L'Heuristique est calculée comme suit :
+* L'heuristique initialisée au nombre de pénalités (en effet on cherche à les minimiser)
+* Si Hitman n'a pas pris la corde, on rajoute à l'heuristique la **distance** de Manhattan entre **hitman** et la **corde** ainsi que de la **distance** entre la **corde** et la **cible**.<br>On rajoute aussi **+4**
+* Si Hitman n'as pas tué sa cible, on rajoute à l'heuristique la **distance** de Manhattan entre **hitman** et la **cible** ainsi que de la **distance** entre la **cible** et la **position (0,0)**.<br>On rajoute aussi **+2**
+* Si aucun des deux, on rajoute à l'heuristique la **distance** de Manhattan entre **hitman** et la **position (0,0)**
+
+Le fait de rajouter les distance entre les objectifs courant et les prochains objectif dans l'heuristique servent à rendre l'heuristique parfaitement **décroissante** en fonction qu'on se rapproche du but final.
+Ainsi l'heuristique sera toujours plus grande lorsque Hitman n'aura pas pris la corde que quand il l'aura récupérée.<br>
+A l'exception du moment où Hitman ait écopé de beacon de pénalité, mais dans ce cas il est intéressant que l'heuristique soit grande afin d'explorer des possibilités avant la récupération de la corde (Comme tuer un garde qui la surveille, cela coutes des points, mais est avantageux finalement).
+Ceci est aussi vrai pour l'assassinat de la cible.
+<br>
+Les **+2** et **+4** sont la pour s'assurer qu'au moment de récupérer la corde ou d'avoir tué la cible que l'heuristique compense les pénalités de ces actions, afin que l'A* continue d'explorer cette voie plutôt que de regarder des voies qui n'ont pas encore effectué cette action.
 <br>
 
 ### Forces et faiblesses
-    ...
+La force de cette implémentation est qu'elle est très efficace est donne casement tour le meilleur chemin. Et s'adapte très bien à la subtilité des assassinate de garde pour libérer un chemin en avance.
+<br>
+Cependant elle est assez longue pour les grandes cartes.
 
 
