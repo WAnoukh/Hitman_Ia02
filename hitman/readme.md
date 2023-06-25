@@ -16,13 +16,13 @@ DUPRE Manon - Anoukhan Wachnicki
 
 # Modélisation STRIPS 
 
-### Précisions des choix de modélisation, validées par Mr Lagrue : 
+## Précisions des choix de modélisation, validées par Mr Lagrue : 
     - Nous n'écrirons pas tous les prédicats et fluents. En effet, différentes possibilités les concernant sont si nombreuses que nous n’en détaillerons que quelques-unes.
     - Nous ne nous occupons pas de la gestion des points pour le Strips, ainsi, nous ne gérons pas non plus la vue des gardes, de Hitman, ainsi que l’ouïe de Hitman.
 
 <br>
 
-### Prédicats : 
+## Prédicats : 
     guard(d, x, y)
     civil(d, x, y)
     pw(x, y)
@@ -35,7 +35,7 @@ DUPRE Manon - Anoukhan Wachnicki
 
 <br> 
 
-### Explications supplémentaires concernant certains prédicats : 
+## Explications supplémentaires concernant certains prédicats : 
 
     - next_clockwise(d1, d2) et next_anti_clockwise(d1, d2) 
     Ces prédicats donnent, à partir d’une direction de base (d1), la prochaine direction dans le sens indiqué par le nom du prédicat (d2).
@@ -58,19 +58,19 @@ DUPRE Manon - Anoukhan Wachnicki
 
 <br>  
 
-### Fluents : 
+## Fluents : 
     - hitman(d, x, y, p, s, so) : avec d pour direction (parmis N, E, S, W), p pour piano wire (True or False) (True si hitman possède l’objet sur lui), s pour suit (True or False), so pour “suit on” (hitman a passé le costume : True or False)
 
     - target(x, y, alive) : (x, y, alive), avec x et y pour les coordonnées, et alive un booléen exprimant si la cible est morte (False) ou vivante (True)
 
 <br> 
 
-### Constantes : 
+## Constantes : 
     N, E, S, W : pour North, East, South, West
 
 <br> 
 
-### Init : 
+## Init : 
     hitman(d, 1, 0, False, False, False) 
     ∧ target(0, 3, True) ∧ pw(5, 0) ∧ suit(3, 5) ∧ gard(N, 4, 5) ∧ civil(E, 3, 2)...  
     ∧ walkable(0, 0) ∧ walkable(0, 1) ∧ walkable(1, 0) ∧ walkable(1, 1) ∧ walkable(2, 1) ∧ ...  
@@ -86,14 +86,14 @@ DUPRE Manon - Anoukhan Wachnicki
 
 <br> 
 
-### Goal : 
+## Goal : 
     hitman(d, 1, 0, True, s, so) ∧ target(0, 3, False) 
 
     En effet, hitman doit être revenu à la case de départ, et target doit être mort (alive = False).
 
 <br> 
 
-### Actions : 
+## Actions : 
     Action( turn_clockwise()
         Precond : hitman(d, x, y, p, s, so), next_clockwise(d, d2)
         Effect : hitman(d2, x, y, p, s, so) ∧ ¬hitman(d, x, y, p, s, so) )
