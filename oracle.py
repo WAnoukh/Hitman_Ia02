@@ -170,6 +170,17 @@ class Oracle:
             "is_in_guard_range": self.__is_in_guard_range,
         }
 
+    def set_status(self, n_status) -> Dict:
+        self.__phase = n_status["phase"]
+        self.__guard_count = n_status["guard_count"]
+        self.__civil_count = n_status["civil_count"]
+        self.__m = n_status["m"]
+        self.__n = n_status["n"]
+        self.__pos = n_status["position"]
+        self.__orientation = n_status["orientation"]
+        self.__phase1_penalties = n_status["penalties"]
+        self.__is_in_guard_range = n_status["is_in_guard_range"]
+
     def send_content(self, map_info: Dict[Tuple[int, int], HC]) -> bool:
         if not self.__has_guessed:
             self.__has_guessed = True

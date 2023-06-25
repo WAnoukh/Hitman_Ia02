@@ -3,11 +3,10 @@ from phase1.phase1 import phase1_run
 from phase1.idiot import phase1_run
 from pprint import pprint
 from hitman.hitman import HitmanReferee
-from phase1.phase1 import main
-from phase1.idiot import phase1_run
+from phase1.phase1 import main,phase1_run
 
 if __name__ == '__main__':
-    main()
+    #main()
 
 
 
