@@ -16,7 +16,7 @@ DUPRE Manon - WACHNICKI Anoukhan
 
 # Modélisation STRIPS 
 
-## Précisions des choix de modélisation, validées par Mr Lagrue : 
+## Précisions des choix de modélisation, validées par M. Lagrue : 
     - Nous n'écrirons pas tous les prédicats et fluents. En effet, différentes possibilités les concernant sont si nombreuses que nous n’en détaillerons que quelques-unes.
     - Nous ne nous occupons pas de la gestion des points pour le Strips, ainsi, nous ne gérons pas non plus la vue des gardes, de Hitman, ainsi que l’ouïe de Hitman.
 
