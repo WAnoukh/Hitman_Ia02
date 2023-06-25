@@ -55,9 +55,6 @@ def update_kb(status, first=False):
 
 
     #Use SAT solver to know if we can deduct that an unknown tile hosts a guard
-    # KB + not guard on an unknown tile   -->  if it is unsat, we know that there is a guard on this tile 
-    # if we know there is a guard on this tile, we have to know its direction so we test with HC.N, HC.S, HC.W, HC.E
-    # when we have     KB + not guard with a direction --> unsat    we know the direction of the guard
     for x,y in unknown_tiles :
         
         sat_test = deepcopy(sat_kb)
@@ -69,6 +66,10 @@ def update_kb(status, first=False):
 
         directions = [None, HC.N, HC.S, HC.W, HC.E]
         j = 0
+        
+        # KB + not guard on an unknown tile   -->  if it is unsat, we know that there is a guard on this tile 
+        # if we know there is a guard on this tile, we have to know its direction so we test with HC.N, HC.S, HC.W, HC.E
+        # when we have     KB + not guard with a direction --> unsat    we know the direction of the guard
         while (j == 0 and exec_gophersat(file_name) == False ) or (0 < j and j < 5 and exec_gophersat(file_name) != False) :
             sat_test = deepcopy(sat_kb)
             dimacs_string = clauses_to_dimacs(sat_test, h*w*len(Type))

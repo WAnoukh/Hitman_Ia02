@@ -1,8 +1,6 @@
 import subprocess
 from typing import Tuple, List
 
-# Le contenu de ce fichier est ajouté dans le fichier phase1.py
-
 # à décommenter pour tester 
 
 def clauses_to_dimacs(clauses, nb_vars):
