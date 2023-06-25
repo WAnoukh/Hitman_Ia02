@@ -3,6 +3,7 @@ DUPRE Manon - WACHNICKI Anoukhan
 
 <br><br><br>  
 # Sommaire : 
+- Faire fonctionner le projet
 - Modélisation STRIPS 
 - Fonctionnement de notre projet 
   - Phase 1
@@ -13,6 +14,14 @@ DUPRE Manon - WACHNICKI Anoukhan
     - Forces et faiblesses
 
 <br><br><br> 
+
+# Faire fonctionner le projet
+
+Il est important de :
+* **Exécuter** le fichier **main.py**
+* Que l'**arbitre** soit localisé dans le fichier **./hitman/hitman.py** relativement a main.py et se nomme **HitmanReferee**. (a moins de changer tout les 'from hitman.hitman import HitmanReferee' par l'importation voulue)
+* Que gophersat.exe soit présent dans le même dossier que main.py (En réalité il n'est pas utilisé dans le projet, c'est seulement si vous voulez tester les fonctions présentes du SAT)
+
 
 # Modélisation STRIPS 
 
@@ -186,6 +195,8 @@ Les états de succès ( qui terminent la recherche) sont ceux où hitman est en 
 Les successeurs des états sont tous les "status" que l'on peut obtenir après avoir effectué une action comme un déplacement ou bien un ramassage d'objet ou l'enfilage de combinaison (et toutes les autres).
 <br>.
 Nous filtrons cependant les status qui sont invalides (avoir avancé sur un mur ou avoir récupéré un objet qui n'est pas présent) ou les status qui résultent d'actions stupides (tourner 3 fois dans la même direction, tourner dans un sens puis dans l'autre, retourner à un emplacement qu'on a quitté avec une direction différente alors que nous avons effectué aucune action significative)
+
+Pour générer ces **"status"** et les pénalités qui vont avec, nous utilisons un **Oracle** (classe identique à HitmanReferee) sur lequel un execute les actions voulues.
 
 L'Heuristique est calculée comme suit :
 * L'heuristique initialisée au nombre de pénalités (en effet on cherche à les minimiser)
