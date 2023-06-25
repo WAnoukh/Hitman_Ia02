@@ -15,20 +15,57 @@ def add_to_kb(literal):
     sat_kb.append([literal])
 
 
+def sat_guess_unknown_tile(x,y,status):
+    if map[y][x] is None:
+        for t in ["g","c"]:
+            for dir in [HC.N,HC.S,HC.E,HC.W]:
+                lit = literal_from_cell(x,y,t,dir)
+                sat_kb.append([-lit])
+                dmac = clauses_to_dimacs(sat_kb,nb_var())
+                sat_kb.pop()
+                file_name = "../kb.cnf"
+                write_dimacs_file(dmac,file_name)
+                res = exec_gophersat(file_name)
+                print(x,y,t,dir,res)
+                if not res[0]:
+                    sat_kb.append([lit])
+                    map[y][x] = decode_literal(lit)[2]
+                    return True
+
+    return False
+
 def update_kb(status, first=False):
     global guessed
     for (x, y), type in status["vision"]:
         if map[y][x] is None:
             guessed += 1
         map[y][x] = type
-        #ajouter à la kb sat ce qu'on
+        if type == HC.GUARD_N:
+            add_to_kb(literal_from_cell(x,y,'g',HC.N))
+        elif type == HC.GUARD_S:
+            add_to_kb(literal_from_cell(x, y, 'g', HC.S))
+        elif type == HC.GUARD_E:
+            add_to_kb(literal_from_cell(x, y, 'g', HC.E))
+        elif type == HC.GUARD_W:
+            add_to_kb(literal_from_cell(x, y, 'g', HC.W))
+        else:
+            add_to_kb(-literal_from_cell(x, y, 'g', None))
+
+        if type == HC.CIVIL_N:
+            add_to_kb(literal_from_cell(x,y,'c',HC.N))
+        elif type == HC.CIVIL_S:
+            add_to_kb(literal_from_cell(x, y, 'c', HC.S))
+        elif type == HC.CIVIL_E:
+            add_to_kb(literal_from_cell(x, y, 'c', HC.E))
+        elif type == HC.CIVIL_W:
+            add_to_kb(literal_from_cell(x, y, 'c', HC.W))
+        else:
+            add_to_kb(-literal_from_cell(x, y, 'c', None))
+
     x, y = status["position"]
     add_to_kb(-literal_from_cell(x, y, "g", None))
 
     add_to_kb(literal_from_sound(x, y, status["hear"]))
-
-
-    #ici
 
 
     print(guessed * 2, "point against ", status["penalties"], "penalities ! Score",guessed * 2- status["penalties"] )
@@ -71,7 +108,7 @@ def phase1_run(n_hr, n_status):
     hr = n_hr
     status = n_status
     map = [[None] * status['n'] for _ in range(status['m'])]
-    sat_kb = init_KB(status)
+    #sat_kb = init_KB(status)
     update_kb(status, first=True)
     print(map)
     x, y = status["position"]
@@ -98,6 +135,15 @@ def phase1_run(n_hr, n_status):
         w, h = n_status["n"], n_status["m"]
         if map[nuy][nux] is not None:
             nu = nearest_unknown(x, y, w, h)
+        #if map[nuy][nux] is not None:
+        #    nu = nearest_unknown(x, y, w, h)
+        #    while True:
+        #        if nu is None:
+        #            break
+        #        nux,nuy = nu
+        #        if not sat_guess_unknown_tile(nux, nuy, status):
+        #            break
+        #        nu = nearest_unknown(x, y, w, h)
         #print("next nearest", nu)
         #input()
         #if guessed > h*w/2:

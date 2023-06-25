@@ -89,6 +89,7 @@ world_example = [
 ]
 
 
+
 complete_map_example = {
     (0, 5): HC.EMPTY,
     (1, 5): HC.EMPTY,
