@@ -272,7 +272,7 @@ def hear_at_pos(x,y,n):
                 lits.append(literal_from_cell(x2,y2,"g",None))
                 lits.append(literal_from_cell(x2, y2, "c", None))
     cb = []
-    if n != 0 and False:
+    if n != 0:
         cb += at_least_person(n, lits)
     cb += at_most_person(n, lits)
     sound_lit = literal_from_sound(x,y,n)
@@ -298,17 +298,17 @@ def get_initial_person_count_clauses() -> ClauseBase:
     cb = []
     for type, count in [('g', guard_count), ('c', civil_count)]:
         pass
-        #glts, glts2 = generate_person_literals(type)
-        #print(glts, glts2)
-        #cb += at_least_person(count, glts)
-        #cb += at_most_person(count, glts)
-        #cb += clause_person_direction(glts, glts2)
-        #go = []  # qu'une seule direction par case
-        #n_pos = []
-        #for position in glts2:
-        #    n_pos = [e for e in position]
-        #    go += at_most_person(1, n_pos)
-        #cb += go
+        glts, glts2 = generate_person_literals(type)
+        print(glts, glts2)
+        cb += at_least_person(count, glts)
+        cb += at_most_person(count, glts)
+        cb += clause_person_direction(glts, glts2)
+        go = []  # qu'une seule direction par case
+        n_pos = []
+        for position in glts2:
+            n_pos = [e for e in position]
+            go += at_most_person(1, n_pos)
+        cb += go
     cb += hear()
 
         #cb += vision(type)
@@ -319,12 +319,9 @@ def get_initial_person_count_clauses() -> ClauseBase:
 def init_KB(status):
     global w, h, guard_count, civil_count
     w, h = status["n"], status["m"]
-    w,h = 2,2
     print("w :", w, "h:", h)
     guard_count = status["guard_count"]
     civil_count = status["civil_count"]
-    guard_count = 1
-    civil_count = 0
     print("g :", guard_count, "c:", civil_count)
     return get_initial_person_count_clauses()
 
