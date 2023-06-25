@@ -40,7 +40,6 @@ def add_to_KB_clauses_List(clauses_list : List[List[str]]) :
 def add_to_KB_clause(clause : List[str]) :
     KB.append(clause)
 
-#pas trop compris
 def update_KB():
     for (x, y), cell in status["vision"]:
         vision_KB[y][x] = cell # cell = ce que contient la case

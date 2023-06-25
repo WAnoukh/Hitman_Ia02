@@ -72,7 +72,7 @@ def literal_from_seen(x: int, y: int, seen: int) -> Literal:
     return lit + 1
 
 
-def decode_literal(literal: int) -> (int, int, Type):
+def decode_literal(literal: int) : #-> (int, int, Type):
     x: int
     y: int
     type: Type
@@ -97,6 +97,95 @@ def decode_literal(literal: int) -> (int, int, Type):
         x = literal // type_nb
         literal %= type_nb
         return x, y, Type(literal)
+
+
+
+# Ajouts clauses 
+# Ajout des clauses liées à la vue des gardes ou civils
+
+def get_clauses_from_seen_by_G(x, y) :# return [ [literal, literal], litteral ]
+# (not civil on (x,y) ) AND (in view of gard) 
+    clauses = []  #"AND"
+    clause = []  #"OR"
+
+# not civil where hitman is ("ANDs" so we add the literals directly in clauses)
+    for dir in [HC.N, HC.E, HC.S, HC.W] :
+        clauses.append(f"-{literal_from_cell(x, y,'c', dir)}")
+
+
+# in range of gard ("ORs" so we add the literals in clause, and then the clause in clauses)
+    # guard on the East of Hitman
+    clause.append(literal_from_seen(x+1, y, HC.W))
+    clause.append(literal_from_seen(x+2, y, HC.W))
+
+    # guard on the West of Hitman
+    clause.append(literal_from_seen(x-1, y, HC.E))
+    clause.append(literal_from_seen(x-2, y, HC.E))
+
+    # guard on the North of Hitman
+    clause.append(literal_from_seen(x, y+1, HC.S))
+    clause.append(literal_from_seen(x, y+2, HC.S))
+
+    # guard on the South of Hitman
+    clause.append(literal_from_seen(x, y-1, HC.N))
+    clause.append(literal_from_seen(x, y-2, HC.N))
+
+    clauses.append(clause)
+    return clauses
+
+
+
+
+def get_clause_from_seen_by_C(x, y) : # return [ literal, literal, litteral ]
+    # clauses = []  #"AND"
+    clause = []  #"OR"
+
+# in range of civil ("ORs" so we add the literals in clause, and then the clause in clauses)
+
+    # civil on Hitman
+    for dir in [HC.N, HC.E, HC.S, HC.W] :
+        clause.append(literal_from_cell(x, y,'c', dir))
+
+    # civil on the East of Hitman
+    clause.append(literal_from_seen(x+1, y, HC.W))
+
+    # civil on the West of Hitman
+    clause.append(literal_from_seen(x-1, y, HC.E))
+
+    # civil on the North of Hitman
+    clause.append(literal_from_seen(x, y+1, HC.S))
+
+    # civil on the South of Hitman
+    clause.append(literal_from_seen(x, y-1, HC.N))
+
+    return clause
+
+
+
+def get_clauses_from_not_seen_by_anyone(x, y) :
+# (not seen by civil) and (not seen by guard) 
+    clauses = [] #"AND"
+    clause = []  #"OR"
+
+# not seen by civil
+    for literal in get_clause_from_seen_by_C(x,y) :
+        clauses.append(f"-{litteral}")
+
+#pas fini
+
+        
+
+
+
+
+
+
+def get_clauses_from_seen(watcher) :
+    if watcher == 
+# pas fini
+
+
+
 
 # je veux bien des explications
 def get_initial_person_count_clauses(i: int,sign: int ,elts: list[int]) -> ClauseBase: 
@@ -123,6 +212,12 @@ def get_initial_person_count_clauses(i: int,sign: int ,elts: list[int]) -> Claus
                     newCb.append(nc)        
 
     return get_initial_person_count_clauses(2,1,elts)
+
+
+
+
+
+
 
 def k_parmis_n(n:int,k:int):
     if k > n or k == 0:
@@ -151,6 +246,9 @@ def count(n,k):
             ne.append(i)
             nl.append(ne)
     return nl
+
+
+
 
 
 
