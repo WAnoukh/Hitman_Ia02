@@ -1,5 +1,5 @@
 # IA02 : Rapport de projet
-DUPRE Manon - Anoukhan Wachnicki
+DUPRE Manon - WACHNICKI Anoukhan
 
 <br><br><br>  
 # Sommaire : 
