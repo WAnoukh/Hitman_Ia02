@@ -21,25 +21,16 @@ def update_kb(status, first=False):
         if map[y][x] is None:
             guessed += 1
         map[y][x] = type
-        is_guard = False
-        is_civil = False
-        if 3 <= type.value <= 6:
-            #add_to_kb(literal_from_cell(x, y, "g", type.value - 3 + 14))
-            is_guard = True
-        elif 7 <= type.value <= 10:
-            #add_to_kb(literal_from_cell(x, y, "g", type.value - 7 + 14))
-            is_civil = True
-        if not is_guard:
-            add_to_kb(-literal_from_cell(x, y, "g", None))
-        if not is_civil:
-            add_to_kb(-literal_from_cell(x, y, "c", None))
+        #ajouter à la kb sat ce qu'on
     x, y = status["position"]
     add_to_kb(-literal_from_cell(x, y, "g", None))
-    if status["is_in_guard_range"]:
-        add_to_kb(literal_from_seen(x, y, 0))
-    elif not first:
-        add_to_kb(-literal_from_seen(x, y, 0))
+
     add_to_kb(literal_from_sound(x, y, status["hear"]))
+
+
+    #ici
+
+
     print(guessed * 2, "point against ", status["penalties"], "penalities ! Score",guessed * 2- status["penalties"] )
 
 
